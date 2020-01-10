@@ -11,7 +11,7 @@
 
 #### Avec wget
 
-```sh
+```bash
 
 wget -o /dev/null -O - https://raw.githubusercontent.com/GeorgioLPB/utils/master/updates/phpMyAdmin/update | bash
 
@@ -19,7 +19,7 @@ wget -o /dev/null -O - https://raw.githubusercontent.com/GeorgioLPB/utils/master
 
 #### Avec curl
 
-```sh
+```bash
 
 curl https://raw.githubusercontent.com/GeorgioLPB/utils/master/updates/phpMyAdmin/update | bash
 
