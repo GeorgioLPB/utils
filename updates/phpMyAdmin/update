@@ -1,0 +1,57 @@
+#!/bin/sh
+pma_link=phpMyAdmin
+user_php=apache
+url_version='https://www.phpmyadmin.net/home_page/version.json'
+
+# wget -o /dev/null -O - http://frt-httpd/SURV/update_phpmyadmin.sh | sh
+# vim /appli/docker/lib/volumes/app_georgio/_data/SURVEILLANCE/update_phpmyadmin.sh
+
+
+function init_and_test_preco()
+{
+ [ 0 -ne $(id -u) ] && echo "Use roor user !" && return 1
+ [ -z "${USER_PHP}" ] && export USER_PHP="${user_php}"
+ [ -z "${PMA_LINK}" ] && export PMA_LINK="${pma_link}"
+ export USER_PHP_GID="$(egrep "^${USER_PHP}:" /etc/passwd | awk -F: '{print $4}')"
+ export GROUP_PHP="$(egrep "^[a-zA-Z0-9]+:x:${USER_PHP_GID}:" /etc/group | awk -F: '{print $1}')"
+ [ -z "${USER_PHP_GID}" ] && echo "User php not found ! Use command 'export USER_PHP=<php_user_name>' and retry" && return 1
+ [ -z "${GROUP_PHP}" ] && echo "Group php not found !" && return 1
+ [ ! -L "${PMA_LINK}" ] && echo "Symbolic link not found : Use command 'export PMA_LINK=<symbolic link>' and retry" && return 1
+ export PMA_LOCAL_RELEASE="$(egrep "^Version"  ${PMA_LINK}/README | awk '{print $2}' | head -1)"
+ [ -z "${PMA_LOCAL_RELEASE}" ] && echo "phpMyAdmin local release not found !" && return 1
+ export PMA_LOCAL_BRANCHE="$(echo ${PMA_LOCAL_RELEASE} | awk -F\. '{print $1"."$2}')"
+ export PMA_LAST_RELEASE="$(wget -o /dev/null -O - "${url_version}" | grep '"version"' | awk -F\" '{print $4}' | egrep "^${PMA_LOCAL_BRANCHE}" | head -1)"
+ [ -z "${PMA_LAST_RELEASE}" ] && echo "phpMyAdmin last release not found !" && return 1
+ [ "${PMA_LOCAL_RELEASE}" == "${PMA_LAST_RELEASE}" ] && echo "phpMyAdmin up to date" && return 1
+ return 0
+}
+
+function download_and_install_phpmyadmin()
+{
+ if [ ! -d "phpMyAdmin-${PMA_LAST_RELEASE}-all-languages" ] ; then
+  wget -nv -O "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" \
+   "https://files.phpmyadmin.net/phpMyAdmin/4.9.4/phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" && \
+  wget -nv -O "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" \
+   "https://files.phpmyadmin.net/phpMyAdmin/4.9.4/phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" && \
+  sha256sum -c "phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" && \
+  tar -zxvf "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" && \
+  cp -pfv ${PMA_LINK}/config.inc.php ./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages/config.inc.php && \
+  mkdir -p ./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages/tmp && \
+  chown -R root:${GROUP_PHP} phpMyAdmin-${PMA_LAST_RELEASE}-all-languages && \
+  chmod -R u=rwX,g=rX,o= phpMyAdmin-${PMA_LAST_RELEASE}-all-languages && \
+  chmod 770 ./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages/tmp && \
+  rm -vf ${PMA_LINK} && \
+  ln -sn phpMyAdmin-${PMA_LAST_RELEASE}-all-languages ${PMA_LINK} && \
+  rm -vf "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" && \
+  echo "Update phpMyAdmin ${PMA_LOCAL_RELEASE} to ${PMA_LAST_RELEASE} : done." && \
+  return 0
+  echo "Error during installation !" && exit 1
+ else
+  echo "Latest release already present but not up to date !"
+  return 1
+ fi
+}
+
+init_and_test_preco && \
+download_and_install_phpmyadmin
+
