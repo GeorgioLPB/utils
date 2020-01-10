@@ -9,8 +9,8 @@ function init_and_test_preco()
  [ -z "${USER_PHP}" ] && export USER_PHP="${user_php}"
  [ -z "${PMA_LINK}" ] && export PMA_LINK="${pma_link}"
  export USER_PHP_GID="$(egrep "^${USER_PHP}:" /etc/passwd | awk -F: '{print $4}')"
- export GROUP_PHP="$(egrep "^[a-zA-Z0-9]+:x:${USER_PHP_GID}:" /etc/group | awk -F: '{print $1}')"
  [ -z "${USER_PHP_GID}" ] && echo "User php not found ! Use command 'export USER_PHP=<php_user_name>' and retry" && return 1
+ export GROUP_PHP="$(egrep ":x:${USER_PHP_GID}:" /etc/group | awk -F: '{print $1}')"
  [ -z "${GROUP_PHP}" ] && echo "Group php not found !" && return 1
  [ ! -L "${PMA_LINK}" ] && echo "Symbolic link not found : Use command 'export PMA_LINK=<symbolic link>' and retry" && return 1
  export PMA_LOCAL_RELEASE="$(egrep "^Version"  ${PMA_LINK}/README | awk '{print $2}' | head -1)"
