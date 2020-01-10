@@ -30,8 +30,9 @@ function download_and_install_phpmyadmin()
   wget -nv -O "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" \
    "https://files.phpmyadmin.net/phpMyAdmin/4.9.4/phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" && \
   sha256sum -c "phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" && \
-  tar -zxvf "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" && \
-  cp -pfv ${PMA_LINK}/config.inc.php ./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages/config.inc.php && \
+  tar -zxf "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" && \
+  cp -pvf "${PMA_LINK}/config.inc.php" "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages/config.inc.php" && \
+  if [ -f "${PMA_LINK}/cacert.pem" ] ; then cp -pvf "${PMA_LINK}/cacert.pem" "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages/cacert.pem" ; fi && \
   mkdir -p ./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages/tmp && \
   chown -R root:${GROUP_PHP} phpMyAdmin-${PMA_LAST_RELEASE}-all-languages && \
   chmod -R u=rwX,g=rX,o= phpMyAdmin-${PMA_LAST_RELEASE}-all-languages && \
