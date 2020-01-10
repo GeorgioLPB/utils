@@ -9,7 +9,8 @@
 | `USER_PHP` | `apache`     | Utilisateur qui exécute le code PHP  |
 | `PMA_LINK` | `phpMyAdmin` | Nom du lien symbolique de phpMyAdmin |
 
-### Utilisation
+
+### Utilisations
 
 #### Avec wget
 
