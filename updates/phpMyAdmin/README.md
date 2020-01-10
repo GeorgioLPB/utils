@@ -4,9 +4,10 @@
 
 ### Variables d'environnements
 
-* `USER_PHP` : Utilisateur qui exécute le code PHP (Défaut : `apache`)
-* `PMA_LINK` : Nom du lien symbolique de phpMyAdmin (Défaut : `phpMyAdmin`)
-
+| Variables  | Défauts      | Utilisations                         |
+|------------|--------------|--------------------------------------|
+| `USER_PHP` | `apache`     | Utilisateur qui exécute le code PHP  |
+| `PMA_LINK` | `phpMyAdmin` | Nom du lien symbolique de phpMyAdmin |
 
 ### Utilisation
 
