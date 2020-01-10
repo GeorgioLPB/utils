@@ -22,6 +22,6 @@ wget -o /dev/null -O - https://raw.githubusercontent.com/GeorgioLPB/utils/master
 
 ```bash
 
-curl -s https://raw.githubusercontent.com/GeorgioLPB/utils/master/updates/phpMyAdmin/update | bash
+curl -Ns https://raw.githubusercontent.com/GeorgioLPB/utils/master/updates/phpMyAdmin/update | bash
 
 ```
