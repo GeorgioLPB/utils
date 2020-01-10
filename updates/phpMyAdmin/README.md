@@ -9,6 +9,18 @@
 
 ### Utilisation
 
-```bash
-coucou
+#### Avec wget
+
+```sh
+
+wget -o /dev/null -O - https://raw.githubusercontent.com/GeorgioLPB/utils/master/updates/phpMyAdmin/update | sh
+
+```
+
+#### Avec curl
+
+```sh
+
+curl https://raw.githubusercontent.com/GeorgioLPB/utils/master/updates/phpMyAdmin/update | sh
+
 ```
