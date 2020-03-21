@@ -26,9 +26,9 @@ function download_and_install_phpmyadmin()
 {
  if [ ! -d "phpMyAdmin-${PMA_LAST_RELEASE}-all-languages" ] ; then
   wget -nv -O "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" \
-   "https://files.phpmyadmin.net/phpMyAdmin/4.9.4/phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" && \
+   "https://files.phpmyadmin.net/phpMyAdmin/${PMA_LAST_RELEASE}/phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" && \
   wget -nv -O "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" \
-   "https://files.phpmyadmin.net/phpMyAdmin/4.9.4/phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" && \
+   "https://files.phpmyadmin.net/phpMyAdmin/${PMA_LAST_RELEASE}/phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" && \
   sha256sum -c "phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz.sha256" && \
   tar -zxf "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages.tar.gz" && \
   cp -pvf "${PMA_LINK}/config.inc.php" "./phpMyAdmin-${PMA_LAST_RELEASE}-all-languages/config.inc.php" && \
